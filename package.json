@@ -1,0 +1,39 @@
+{
+  "name": "web3-errors-extract",
+  "version": "0.0.1",
+  "description": "Get EVM based web3 transaction revert messages or any other errors",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typescript": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moazzamgodil/web3-errors-extract.git"
+  },
+  "keywords": [
+    "web3",
+    "errors",
+    "evm",
+    "ethereum",
+    "blockchain",
+    "extract"
+  ],
+  "author": "Moazzam Ahmed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moazzamgodil/web3-errors-extract/issues"
+  },
+  "homepage": "https://github.com/moazzamgodil/web3-errors-extract#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.13",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "web3": "^4.4.0"
+  }
+}
