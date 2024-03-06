@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const executionReverted_1 = __importDefault(require("./executionReverted"));
 const internalRPC_1 = __importDefault(require("./internalRPC"));
+const getweb3_1 = __importDefault(require("./getweb3"));
 const _getErrorMessage = (err, web3) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     const defaultErrMsg = "Something went wrong. Please try again later.";
@@ -28,6 +29,12 @@ const _getErrorMessage = (err, web3) => __awaiter(void 0, void 0, void 0, functi
     }
     else if ((err === null || err === void 0 ? void 0 : err.message) && ((_d = err.message) === null || _d === void 0 ? void 0 : _d.includes("execution reverted:"))) {
         ret = err.message.slice(err.message.indexOf("execution reverted:"), err.message.length);
+    }
+    if (!ret) {
+        const errFromWeb3 = (0, getweb3_1.default)(err, web3);
+        if (errFromWeb3) {
+            ret = errFromWeb3;
+        }
     }
     if (ret) {
         return ret;
