@@ -2,6 +2,7 @@ import Web3 from "web3";
 import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
 import executionReverted from "./executionReverted";
 import internalRPCError from "./internalRPC";
+import getErrFromWeb3 from "./getweb3";
 
 const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>): Promise<string> => {
     const defaultErrMsg = "Something went wrong. Please try again later.";
@@ -19,6 +20,13 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>): P
             err.message.indexOf("execution reverted:"),
             err.message.length
         );
+    }
+
+    if (!ret) {
+        const errFromWeb3 = getErrFromWeb3(err, web3);
+        if (errFromWeb3) {
+            ret = errFromWeb3;
+        }
     }
 
     if (ret) {
