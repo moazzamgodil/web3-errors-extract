@@ -1,6 +1,6 @@
 {
   "name": "web3-errors-extract",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Get EVM based web3 transaction revert messages or any other errors",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
