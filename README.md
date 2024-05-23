@@ -35,7 +35,29 @@ yarn add web3-errors-extract
 ```
 const { web3errors } = require("web3-errors-extract");
 
-const err = new web3errors("YOUR RPC URL");
+const ABI1 = [{
+    "type":"function",
+    "name":"foo",
+    "inputs": [{"name":"a","type":"uint256"}],
+    "outputs": [{"name":"b","type":"address"}]
+},{
+    "type":"event",
+    "name":"Event",
+    "inputs": [{"name":"a","type":"uint256","indexed":true},{"name":"b","type":"bytes32","indexed":false}],
+}]
+
+const ABI2 = [{
+    "type":"function",
+    "name":"foo",
+    "inputs": [{"name":"a","type":"uint256"}],
+    "outputs": [{"name":"b","type":"address"}]
+},{
+    "type":"event",
+    "name":"Event",
+    "inputs": [{"name":"a","type":"uint256","indexed":true},{"name":"b","type":"bytes32","indexed":false}],
+}]
+
+const err = new web3errors("YOUR RPC URL", [ABI1, ABI2]);
 
 /*
  * Get an error message for a specific tx hash
