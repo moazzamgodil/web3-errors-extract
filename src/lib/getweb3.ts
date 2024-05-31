@@ -1,4 +1,4 @@
-import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
+import { RegisteredSubscription } from "web3-eth";
 import METAMASK_POSSIBLE_ERRORS from "./metamask";
 import Web3 from "web3";
 

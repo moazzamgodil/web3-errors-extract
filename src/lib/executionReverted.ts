@@ -1,18 +1,5 @@
 import Web3 from "web3";
-import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
-
-export let web3Number = (number: number, dec: null | boolean = null, count = 18) => {
-    let num: number | string = number;
-    if (dec !== null) {
-        if (dec) {
-            num = Number(num * 10 ** count).toLocaleString().replaceAll(",", "");
-        } else {
-            num = Number(num / 10 ** count).toLocaleString().replaceAll(",", "");
-        }
-    }
-
-    return num;
-}
+import { RegisteredSubscription } from "web3-eth";
 
 const decodeData = (data: string, state: any, web3: Web3<RegisteredSubscription>) => {
     const methodID = data.slice(2, 10);
@@ -41,7 +28,7 @@ const decodeData = (data: string, state: any, web3: Web3<RegisteredSubscription>
                 if (isArray) {
                     parsedParam = param.map((val: any) => new (val).toString());
                 } else {
-                    parsedParam = new (param).toString();
+                    parsedParam = (param).toString();
                 }
             }
 
@@ -69,18 +56,25 @@ const decodeData = (data: string, state: any, web3: Web3<RegisteredSubscription>
 }
 
 const executionReverted = async (err: any, state: any, web3: Web3<RegisteredSubscription>): Promise<any> => {
-    const jsonObj = JSON.parse(
-        err.message.slice(
-            err.message.indexOf("{"),
-            err.message.lastIndexOf("}") + 1
-        )
-    );
+    let jsonObj: any;
+    if(err?.data != null && err?.data != undefined) {
+        jsonObj = err.data;
+    } else {
+        jsonObj = JSON.parse(
+            err.message.slice(
+                err.message.indexOf("{"),
+                err.message.lastIndexOf("}") + 1
+            )
+        );
+    }
+
+    
     if (jsonObj?.originalError) {
-        if(jsonObj.originalError?.message == "execution reverted" && jsonObj.originalError?.data != null && jsonObj.originalError?.data != undefined) {
+        if(jsonObj.originalError?.data != null && jsonObj.originalError?.data != undefined) {
             const decodedData = decodeData(jsonObj.originalError.data, state, web3);
+            console.log(decodedData)
             if (decodedData) {
-                console.log(decodedData);
-                return decodedData.name;
+                return decodedData;
             }
         }
         return jsonObj.originalError.message;

@@ -1,20 +1,36 @@
 {
   "name": "web3-errors-extract",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Get EVM based web3 transaction revert messages or any other errors",
-  "main": "dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./lib/commonjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "require": "./lib/commonjs/index.js"
+    }
+  },
   "files": [
-    "dist"
+    "lib/**/*",
+    "dist/**/*"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typescript": "tsc"
+    "typescript": "tsc",
+    "build:cjs": "tsc --build tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > ./lib/commonjs/package.json",
+    "build:esm": "tsc --build tsconfig.esm.json && echo {\"type\": \"module\"} > ./lib/esm/package.json",
+    "build:types": "tsc --build tsconfig.types.json",
+    "esbuild:browser": "esbuild lib/commonjs/index.js --bundle --minify --outfile=dist/web3-errors-extract.min.js",
+    "build:browser": "browserify lib/commonjs/index.js > dist/web3-errors-extract.min.js",
+    "build:all": "npm run build:cjs && npm run build:esm && npm run build:types && npm run esbuild:browser"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/moazzamgodil/web3-errors-extract.git"
   },
+  "browser": "dist/web3-errors-extract.min.js",
   "keywords": [
     "web3",
     "errors",
@@ -31,9 +47,11 @@
   "homepage": "https://github.com/moazzamgodil/web3-errors-extract#readme",
   "devDependencies": {
     "@types/node": "^20.11.13",
+    "esbuild": "0.21.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "web3": "^4.4.0"
+    "@types/web3": "^1.2.2",
+    "web3": "^4.9.0"
   }
 }

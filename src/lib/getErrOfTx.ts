@@ -1,5 +1,5 @@
 import Web3, { Eip838ExecutionError } from "web3";
-import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
+import { RegisteredSubscription } from "web3-eth";
 
 function parseInnerError(e: any) {
     if (e?.innerError?.errorSignature) {

@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import getErrFromWeb3 from "./getweb3";
-import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
+import { RegisteredSubscription } from "web3-eth";
 
 const internalRPCError = async (err: any, web3: Web3<RegisteredSubscription>): Promise<string | null> => {
     let errMsg = err.message;

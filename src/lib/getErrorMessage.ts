@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import { RegisteredSubscription } from "web3/lib/commonjs/eth.exports";
+import { RegisteredSubscription } from "web3-eth";
 import executionReverted from "./executionReverted";
 import internalRPCError from "./internalRPC";
 import getErrFromWeb3 from "./getweb3";
@@ -10,9 +10,9 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, st
     if (err?.message && err.message?.includes("Internal JSON-RPC error.")) {
         ret = await internalRPCError(err, web3);
     } else if (
-        err?.message &&
+        (err?.message &&
         err.message?.includes("execution reverted:") &&
-        err.message?.indexOf("{") !== -1
+        err.message?.indexOf("{") !== -1) || err?.data != null && err?.data != undefined
     ) {
         ret = await executionReverted(err, state, web3);
     } else if (err?.message && err.message?.includes("execution reverted:")) {

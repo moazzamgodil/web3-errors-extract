@@ -57,7 +57,7 @@ const ABI2 = [{
     "inputs": [{"name":"a","type":"uint256","indexed":true},{"name":"b","type":"bytes32","indexed":false}],
 }]
 
-const err = new web3errors("YOUR RPC URL", [ABI1, ABI2]);
+const err = new web3errors("YOUR RPC URL OR PROVIDER", [ABI1, ABI2]: OPTIONAL);
 
 /*
  * Get an error message for a specific tx hash
@@ -68,5 +68,5 @@ err.getErrOfTx("0x1234......fff").then(console.log).catch(console.error);
 /*
  * Get an error message by providing an exception error object of any blockchain (send or call) tx you received in return
  */
-err.getErrorMessage([EXCEPTION ERROR OBJECT]).then(console.log).catch(console.error);
+err.getErrorMessage(EXCEPTION ERROR OBJECT).then(console.log).catch(console.error);
 ```
