@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import { RegisteredSubscription } from "web3-eth";
-export declare class web3errors {
+export declare class Web3errors {
     web3: Web3<RegisteredSubscription>;
     state: {
         savedABIs: Array<any>;

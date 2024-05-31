@@ -5,5 +5,6 @@
 		"esModuleInterop": true,
 		"declaration": true,
 		"module": "commonjs"
-	}
+	},
+	"include": ["src/**/*"]
 }

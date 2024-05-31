@@ -5,7 +5,7 @@ import getErrorMessage from "./getErrorMessage";
 import getErrOfTx from "./getErrOfTx";
 import setAbi from "./setAbi";
 
-export class web3errors {
+export class Web3errors {
     web3: Web3<RegisteredSubscription>;
     state: {
         savedABIs: Array<any>;

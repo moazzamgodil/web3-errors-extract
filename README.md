@@ -33,7 +33,12 @@ yarn add web3-errors-extract
 ## Usage
 
 ```
-const { web3errors } = require("web3-errors-extract");
+const { Web3errors } = require("web3-errors-extract");
+
+OR
+
+import { Web3errors } from "web3-errors-extract";
+
 
 const ABI1 = [{
     "type":"function",
@@ -57,7 +62,7 @@ const ABI2 = [{
     "inputs": [{"name":"a","type":"uint256","indexed":true},{"name":"b","type":"bytes32","indexed":false}],
 }]
 
-const err = new web3errors("YOUR RPC URL OR PROVIDER", [ABI1, ABI2]: OPTIONAL);
+const err = new web3errors("YOUR RPC URL OR PROVIDER", [ABI1, ABI2]: OPTIONAL ARRAY OF ABIs);
 
 /*
  * Get an error message for a specific tx hash

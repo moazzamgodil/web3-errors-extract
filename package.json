@@ -1,6 +1,6 @@
 {
   "name": "web3-errors-extract",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Get EVM based web3 transaction revert messages or any other errors",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
@@ -19,8 +19,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "typescript": "tsc",
-    "build:cjs": "tsc --build tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > ./lib/commonjs/package.json",
-    "build:esm": "tsc --build tsconfig.esm.json && echo {\"type\": \"module\"} > ./lib/esm/package.json",
+    "build:cjs": "tsc --build tsconfig.cjs.json && tsc-alias -p tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > ./lib/commonjs/package.json",
+    "build:esm": "tsc --build tsconfig.esm.json && tsc-alias -p tsconfig.esm.json && echo {\"type\": \"module\"} > ./lib/esm/package.json",
     "build:types": "tsc --build tsconfig.types.json",
     "esbuild:browser": "esbuild lib/commonjs/index.js --bundle --minify --outfile=dist/web3-errors-extract.min.js",
     "build:browser": "browserify lib/commonjs/index.js > dist/web3-errors-extract.min.js",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@types/node": "^20.11.13",
     "esbuild": "0.21.4",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.3.3"
   },
   "dependencies": {

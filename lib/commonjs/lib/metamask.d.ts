@@ -69,4 +69,3 @@ declare const METAMASK_POSSIBLE_ERRORS: {
     };
 };
 export default METAMASK_POSSIBLE_ERRORS;
-//# sourceMappingURL=metamask.d.ts.map
