@@ -6,13 +6,13 @@ import getErrFromWeb3 from "./getweb3";
 
 const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, state: any): Promise<string> => {
     const defaultErrMsg = "Something went wrong. Please try again later.";
-    let ret;
+    let ret: string | null = null;
     if (err?.message && err.message?.includes("Internal JSON-RPC error.")) {
         ret = await internalRPCError(err, web3);
     } else if (
         (err?.message &&
-        err.message?.includes("execution reverted:") &&
-        err.message?.indexOf("{") !== -1) || err?.data != null && err?.data != undefined
+            err.message?.includes("execution reverted:") &&
+            err.message?.indexOf("{") !== -1) || err?.data != null && err?.data != undefined
     ) {
         ret = await executionReverted(err, state, web3);
     } else if (err?.message && err.message?.includes("execution reverted:")) {
@@ -23,7 +23,7 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, st
     }
 
     if (!ret) {
-        const errFromWeb3 = getErrFromWeb3(err, web3);
+        const errFromWeb3 = await getErrFromWeb3(err, web3);
         if (errFromWeb3) {
             ret = errFromWeb3;
         }
@@ -31,7 +31,10 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, st
 
     if (ret) {
         return ret;
+    } else if (err.message) {
+        return err.message;
     }
+    
     return defaultErrMsg;
 }
 
