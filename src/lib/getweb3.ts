@@ -3,11 +3,12 @@ import METAMASK_POSSIBLE_ERRORS from "./metamask";
 import Web3 from "web3";
 
 const getErrFromWeb3 = async (err: any, web3: Web3<RegisteredSubscription>): Promise<string | null> => {
-    if (err && err?.code) {
-        const possibleErr = METAMASK_POSSIBLE_ERRORS?.[err.code as keyof typeof METAMASK_POSSIBLE_ERRORS];
+    if (err && (err?.code || err?.data?.code)) {
+        const errCode = err?.code ? err.code : err.data.code;
+        const possibleErr = METAMASK_POSSIBLE_ERRORS?.[errCode as keyof typeof METAMASK_POSSIBLE_ERRORS];
         if (possibleErr) {
             return possibleErr.message;
-        } else if (err.code === "ACTION_REJECTED") {
+        } else if (errCode === "ACTION_REJECTED") {
             return "User rejected signing";
         } else {
             return err.message;
@@ -24,7 +25,7 @@ const getErrFromWeb3 = async (err: any, web3: Web3<RegisteredSubscription>): Pro
 
             result = result.startsWith("0x") ? result : `0x${result}`;
             if (result && result.substring(138)) {
-                const reason = web3.utils.toAscii(result.substring(138));
+                const reason = web3.utils.toAscii("0x" + result.substring(138));
                 console.log("Revert reason:", reason);
                 return reason;
             } else {
@@ -32,13 +33,11 @@ const getErrFromWeb3 = async (err: any, web3: Web3<RegisteredSubscription>): Pro
             }
         } catch (e: any) {
             var errMsg2 = e.toString();
-            if (errMsg2) {
-                if (errMsg2.startsWith("Error")) {
-                    var errObj2 = errMsg2.slice(errMsg2.indexOf("{"), errMsg2.length);
-                    if (errObj2.indexOf("{") !== -1 && errObj2.lastIndexOf("}")) {
-                        errObj2 = JSON.parse(errObj2);
-                        return errObj2.message;
-                    }
+            if (errMsg2 && errMsg2?.startsWith("Error")) {
+                if (errMsg2.indexOf("{") !== -1 && errMsg2.lastIndexOf("}")) {
+                    let errObj2 = errMsg2.slice(errMsg2.indexOf("{"), errMsg2.lastIndexOf("}") + 1);
+                    errObj2 = JSON.parse(errObj2);
+                    return errObj2.message;
                 }
             }
         }

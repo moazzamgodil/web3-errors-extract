@@ -5,7 +5,7 @@ import getErrorMessage from "./getErrorMessage";
 import getErrOfTx from "./getErrOfTx";
 import setAbi from "./setAbi";
 
-export class Web3errors {
+class Web3errors {
     web3: Web3<RegisteredSubscription>;
     state: {
         savedABIs: Array<any>;
@@ -27,3 +27,14 @@ export class Web3errors {
     getErrorMessage = (err: object | string) => getErrorMessage(err, this.web3, this.state);
     getErrOfTx = (txHash: string) => getErrOfTx(txHash, this.web3);
 }
+declare global {
+    interface Window {
+        Web3errors: typeof Web3errors;
+    }
+}
+
+if (typeof window !== "undefined") {
+    window.Web3errors = Web3errors;
+}
+
+export { Web3errors }

@@ -56,10 +56,10 @@ const decodeData = (data: string, state: any, web3: Web3<RegisteredSubscription>
 }
 
 const executionReverted = async (err: any, state: any, web3: Web3<RegisteredSubscription>): Promise<any> => {
-    let jsonObj: any;
-    if(err?.data != null && err?.data != undefined) {
+    let jsonObj: any = err.message;
+    if (err?.data != null && err?.data != undefined) {
         jsonObj = err.data;
-    } else {
+    } else if (err.message.indexOf("{") !== -1 && err.message.lastIndexOf("}")) {
         jsonObj = JSON.parse(
             err.message.slice(
                 err.message.indexOf("{"),
@@ -68,16 +68,16 @@ const executionReverted = async (err: any, state: any, web3: Web3<RegisteredSubs
         );
     }
 
-    
-    if (jsonObj?.originalError) {
-        if(jsonObj.originalError?.data != null && jsonObj.originalError?.data != undefined) {
-            const decodedData = decodeData(jsonObj.originalError.data, state, web3);
+    if (jsonObj?.originalError || jsonObj?.data) {
+        const jsonData = jsonObj?.originalError?.data?.startsWith("0x") ? jsonObj.originalError.data : jsonObj?.data?.startsWith("0x") ? jsonObj.data : jsonObj?.data?.data?.startsWith("0x") ? jsonObj.data.data : null;
+        if (jsonData) {
+            const decodedData = decodeData(jsonData, state, web3);
             console.log(decodedData)
             if (decodedData) {
                 return decodedData;
             }
         }
-        return jsonObj.originalError.message;
+        return jsonObj?.message || jsonObj?.originalError?.message || jsonObj?.data?.message;
     }
     return jsonObj;
 }
