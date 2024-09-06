@@ -14,14 +14,6 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, st
         }
 
         if (
-            !ret &&
-            (err.message?.includes("execution reverted") && (err.message?.indexOf("{") !== -1 || (err?.data != null && err?.data != undefined))) ||
-            (err.message?.includes("Internal JSON-RPC error") && (err?.data != null && err?.data != undefined))
-        ) {
-            ret = await executionReverted(err, state, web3);
-        }
-        
-        if (
             !ret
             && err.message?.includes("execution reverted:")
         ) {
@@ -29,6 +21,14 @@ const _getErrorMessage = async (err: any, web3: Web3<RegisteredSubscription>, st
                 err.message.indexOf("execution reverted:"),
                 err.message.length
             );
+        }
+
+        if (
+            !ret &&
+            ((err.message?.includes("execution reverted") && (err.message?.indexOf("{") !== -1 || (err?.data != null && err?.data != undefined))) ||
+                (err.message?.includes("Internal JSON-RPC error") && (err?.data != null && err?.data != undefined)))
+        ) {
+            ret = await executionReverted(err, state, web3);
         }
     }
 
