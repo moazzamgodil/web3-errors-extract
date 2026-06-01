@@ -1,13 +1,21 @@
 import Web3, { Eip838ExecutionError } from "web3";
 import { RegisteredSubscription } from "web3-eth";
 
+const tryParseJSON = (value: string): any | null => {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+};
+
 function parseInnerError(e: any) {
     if (e?.innerError?.errorSignature) {
         return e.innerError;
     }
 
     if (!e.innerError) {
-        if (e?.data?.data.startsWith('0x')) {
+        if (typeof e?.data?.data === "string" && e.data.data.startsWith("0x")) {
             e.innerError = new Eip838ExecutionError(e.data);
         }
     }
@@ -16,6 +24,9 @@ function parseInnerError(e: any) {
 
 const _getErrOfTx = async (txHash: any, web3: Web3<RegisteredSubscription>): Promise<string> => {
     const tx: any = await web3.eth.getTransaction(txHash);
+    if (!tx) {
+        return "Transaction not found";
+    }
     if (tx.gasPrice) {
         delete tx.maxPriorityFeePerGas;
         delete tx.maxFeePerGas;
@@ -39,9 +50,11 @@ const _getErrOfTx = async (txHash: any, web3: Web3<RegisteredSubscription>): Pro
         const errMsg = e.toString();
         if (errMsg && errMsg.startsWith("Error")) {
             let errObj = errMsg.slice(errMsg.indexOf("{"), errMsg.length);
-            if (errObj.indexOf("{") !== -1 && errObj.lastIndexOf("}")) {
-                errObj = JSON.parse(errObj);
-                return errObj.message;
+            if (errObj.indexOf("{") !== -1 && errObj.lastIndexOf("}") !== -1) {
+                const parsedErr = tryParseJSON(errObj);
+                if (parsedErr?.message) {
+                    return parsedErr.message;
+                }
             }
         }
 

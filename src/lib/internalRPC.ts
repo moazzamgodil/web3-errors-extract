@@ -2,6 +2,14 @@ import Web3 from "web3";
 import getErrFromWeb3 from "./getweb3";
 import { RegisteredSubscription } from "web3-eth";
 
+const tryParseJSON = (value: string): any | null => {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+};
+
 const internalRPCError = async (err: any, web3: Web3<RegisteredSubscription>): Promise<string | null> => {
     let errMsg = err.message;
     if (typeof err.message !== "string") {
@@ -11,11 +19,15 @@ const internalRPCError = async (err: any, web3: Web3<RegisteredSubscription>): P
             errMsg = err.message.toString();
         }
     }
-    if (errMsg.indexOf("{") !== -1 && errMsg.lastIndexOf("}")) {
-        const errObj = errMsg.slice(errMsg.indexOf("{"), errMsg.lastIndexOf("}") + 1);
-        const parsedErrObj = JSON.parse(errObj);
-        const errFromWeb3 = await getErrFromWeb3(parsedErrObj, web3);
-        return errFromWeb3;
+    const startIdx = errMsg.indexOf("{");
+    const endIdx = errMsg.lastIndexOf("}");
+    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        const errObj = errMsg.slice(startIdx, endIdx + 1);
+        const parsedErrObj = tryParseJSON(errObj);
+        if (parsedErrObj) {
+            const errFromWeb3 = await getErrFromWeb3(parsedErrObj, web3);
+            return errFromWeb3;
+        }
     }
     return null;
 }

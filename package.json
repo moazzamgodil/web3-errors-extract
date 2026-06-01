@@ -1,6 +1,6 @@
 {
   "name": "web3-errors-extract",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Get EVM based web3 transaction revert messages or any other errors",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
@@ -17,7 +17,8 @@
     "dist/**/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
     "typescript": "tsc",
     "build:cjs": "tsc --build tsconfig.cjs.json && tsc-alias -p tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > ./lib/commonjs/package.json",
     "build:esm": "tsc --build tsconfig.esm.json && tsc-alias -p tsconfig.esm.json && echo {\"type\": \"module\"} > ./lib/esm/package.json",
@@ -46,9 +47,12 @@
   },
   "homepage": "https://github.com/moazzamgodil/web3-errors-extract#readme",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.13",
     "@types/web3": "^1.2.2",
     "esbuild": "0.21.4",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.3.3"
   },
